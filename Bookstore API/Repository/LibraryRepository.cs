@@ -8,7 +8,14 @@ namespace Bookstore_API.Repository
 {
     internal class LibraryRepository
     {
-        private string _databasePath = AppDomain.CurrentDomain.BaseDirectory + @"\App_Data\Books.xml";
+        // private string _databasePath = AppDomain.CurrentDomain.BaseDirectory + @"\App_Data\Books.xml";
+        private string _databasePath;
+
+        public LibraryRepository()
+        {
+            _databasePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppSettings["DatabasePath"]);
+        }
+
         internal BookModel GetBook(string ISBN)
         {
             var book = new BookModel();
