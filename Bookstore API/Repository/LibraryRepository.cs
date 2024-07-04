@@ -10,11 +10,11 @@ namespace Bookstore_API.Repository
 {
     internal class LibraryRepository
     {
-        private string _databasePath;
+        private string dbPath;
 
         public LibraryRepository()
         {
-            _databasePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppSettings["DatabasePath"]);
+            dbPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppSettings["DatabasePath"]);
         }
 
         internal List<BookModel> GetBooks(string searchText)
@@ -28,24 +28,24 @@ namespace Bookstore_API.Repository
             return books;
         }
 
-        private LibraryModel GetLibrary()
-        {
-            var xmlSerializer = new XmlSerializer(typeof(LibraryModel));
-            using (var context = new StreamReader(_databasePath))
-            {
-                return (LibraryModel)xmlSerializer.Deserialize(context);
-            }
-        }
-
         internal void SetBook(BookModel newBook)
         {
             var library = GetLibrary();
             library.Books.Add(newBook);
 
             var xmlSerializer = new XmlSerializer(typeof(LibraryModel));
-            using (var writer = new StreamWriter(_databasePath))
+            using (var writer = new StreamWriter(dbPath))
             {
                 xmlSerializer.Serialize(writer, library);
+            }
+        }
+
+        private LibraryModel GetLibrary()
+        {
+            var xmlSerializer = new XmlSerializer(typeof(LibraryModel));
+            using (var context = new StreamReader(dbPath))
+            {
+                return (LibraryModel)xmlSerializer.Deserialize(context);
             }
         }
 
@@ -64,7 +64,7 @@ namespace Bookstore_API.Repository
             }
 
             string filePath = Path.Combine(folderPath, $"{fileName}.txt");
-            File.WriteAllText(filePath, $"Title: {suggestion.Title}\nSender: {suggestion.Name}"); 
+            File.WriteAllText(filePath, $"Title: {suggestion.Title}\nAuthor: {suggestion.Author}\nSender: {suggestion.Name}"); 
         }
     }
 }
