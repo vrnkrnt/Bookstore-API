@@ -85,4 +85,14 @@
     <Title>Titeln</Title>
     <ISBN>12345</ISBN>
   </Book>
+  <Book>
+    <Author>Author Author</Author>
+    <Title>Title Title</Title>
+    <ISBN>12345</ISBN>
+  </Book>
+  <Book>
+    <Author>Author a</Author>
+    <Title>Title t</Title>
+    <ISBN>12345</ISBN>
+  </Book>
 </Library>
