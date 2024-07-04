@@ -1,0 +1,51 @@
+﻿<h2>@ViewBag.Title</h2>
+<div>
+    <form id="addBookForm">
+        <label for="title">Title:</label><br>
+        <input type="text" id="title"><br><br>
+        <label for="author">Author:</label><br>
+        <input type="text" id="author"><br><br>
+        <label for="isbn">ISBN:</label><br>
+        <input type="text" id="isbn"><br><br>
+        <input type="submit" value="Add Book">
+    </form>
+</div>
+<div id="addResult"></div>
+
+<script>
+    document.getElementById('addBookForm').addEventListener('submit', function (event) {
+        // event.preventDefault();
+
+        const title = document.getElementById('title').value.trim();
+        const author = document.getElementById('author').value.trim();
+        const isbn = document.getElementById('isbn').value.trim();
+        const addResult = document.getElementById('addResult');
+        addResult.innerHTML = '';
+
+        if (title && author && isbn) {
+            const newBook = { Title: title, Author: author, ISBN: isbn };
+
+            fetch('/api/bookinfo/createbook', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(newBook)
+            })
+                .then(response => response.text())
+                .then(data => {
+                    addResult.innerHTML = `<h3>The book is now added to the bookstore :)</h3>`;
+                    document.getElementById('addBookForm').reset();
+                })
+                .catch(error => {
+                    console.error('Something went wrong:', error);
+                    addResult.innerHTML = `<h3>Error</h3>
+                                           <p>Something went wrong. Please try again later.</p>`;
+                });
+        } else {
+            addResult.innerHTML = `<h3>Invalid input</h3>
+                                   <p>Please put in title, author, and ISBN for the book.</p>`;
+        }
+    });
+</script>
+

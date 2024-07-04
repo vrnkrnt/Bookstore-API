@@ -1,9 +1,9 @@
 ﻿<h1>Bookstore API</h1>
 <div>
     <form id="searchForm">
-        <label for="isbn">ISBN kod:</label>
-        <input type="text" id="isbn" name="isbn"><br><br>
-        <input type="submit" value="Sök">
+        <label for="searchText">Search:</label>
+        <input type="text" id="searchText"><br><br>
+        <input type="submit" value="Go">
     </form>
 </div>
 <div id="result"></div>
@@ -12,24 +12,41 @@
     document.getElementById('searchForm').addEventListener('submit', function (event) {
         event.preventDefault();
 
-        const isbn = document.getElementById('isbn').value;
-        fetch(`/api/bookinfo?ISBN=${isbn}`)
-            .then(response => response.json())
-            .then(data => {
-                let resultDiv = document.getElementById('result');
-                resultDiv.innerHTML = '';
+        let searchText = document.getElementById('searchText').value.trim();
 
-                if (data && data.Title) {
-                    resultDiv.innerHTML = `<h2>Resultat:</h2>
-                                               <p>Titel: ${data.Title}</p>
-                                               <p>ISBN: ${data.ISBN}</p>`;
-                } else {
-                    resultDiv.innerHTML = `<p>Boken hittades inte.</p>`;
-                }
-            })
-            .catch(error => {
-                console.error('Något gick fel:', error);
-            });
+        const result = document.getElementById('result');
+        result.innerHTML = '';
+
+        if (searchText && searchText != "") {
+
+            if (!isNaN(searchText)) {
+                searchText = searchText.toString();
+            }
+
+            const apiUrl = `/api/bookinfo/SearchBook?searchText=${searchText}`;
+
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    if (Array.isArray(data) && data.length > 0) {
+                        result.innerHTML = `<h2>Results (${data.length})</h2>`;
+                        data.forEach(book => {
+                            result.innerHTML += `<p>Title: ${book.Title}<br>
+                                                    Author: ${book.Author}<br>
+                                                    ISBN: ${book.ISBN}<hr></p>`;
+                        });
+                    } else {
+                        result.innerHTML = `<h3>No results...</h3>`;
+                    }
+                })
+                .catch(error => {
+                    console.error('Something went wrong:', error);
+                    result.innerHTML = `<h3>Error</h3>
+                                        <p>Something went wrong.</p>`;
+                });
+        } else {
+            result.innerHTML = `<h3>Invalid input</h3>
+                                <p>Please write a correct ISBN-number, author, or book title.</p>`;
+        }
     });
-
 </script>

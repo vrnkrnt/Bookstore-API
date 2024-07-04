@@ -1,0 +1,49 @@
+﻿<h2>@ViewBag.Title</h2>
+<div>
+    <form id="addSuggestionForm">
+        <label for="name">Your name:</label><br>
+        <input type="text" id="name"><br><br>
+        <label for="title">Title:</label><br>
+        <input type="text" id="title"><br><br>
+        <label for="author">Author:</label><br>
+        <input type="text" id="author"><br><br>
+        <input type="submit" value="Add Suggestion">
+    </form>
+</div>
+<div id="addResult"></div>
+
+<script>
+    document.getElementById('addSuggestionForm').addEventListener('submit', function (event) {
+        // event.preventDefault();
+
+        const name = document.getElementById('name').value.trim();
+        const title = document.getElementById('title').value.trim();
+        const author = document.getElementById('author').value.trim();
+        const addResult = document.getElementById('addResult');
+        addResult.innerHTML = '';
+
+        if (name && title && author) {
+            const newSuggestion = { Name: name, Title: title, Author: author };
+            fetch('/api/bookinfo/suggestbook', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(newSuggestion)
+            })
+                .then(response => response.text())
+                .then(data => {
+                    addResult.innerHTML = `<h3>The book is now added to our suggestion folder, thanks!</h3>`;
+                    document.getElementById('addSuggestionForm').reset();
+                })
+                .catch(error => {
+                    console.error('Something went wrong:', error);
+                    addResult.innerHTML = `<h3>Error</h3>
+                                           <p>Something went wrong.</p>`;
+                });
+        } else {
+            addResult.innerHTML = `<h3>Invalid input</h3>
+                                   <p>Please put in title, author, and your name for the suggestion.</p>`;
+        }
+    });
+</script>
