@@ -1,33 +1,32 @@
 # Bookstore-API
 
-## TEKNIKTEST
-### Projektbeskrivning
+### Project description
+This project involves a series of enhancements and extensions to an existing library system written in .NET C#. Below is a summary of the main tasks and the changes that have been implemented:
 
-Det här projektet innefattar en serie förbättringar och utökningar av ett befintligt bibliotekssystem skrivet i .NET C#. Här är en sammanfattning av de huvudsakliga uppgifterna och de förändringar som har implementerats:
+1. **Move hardcoded database link to configuration file:**
+   - The link to the database XML file, which was previously hardcoded in `LibraryRepository.cs`, has been moved to a configuration file (`web.config` or `appsettings.json`). This allows users to change the database path without recompiling the code.
 
-1. **Flytt av Hårdkodad Databaslänk till Konfigurationsfil:**
-   - Länken till databasens XML-fil som tidigare var hårdkodad i `LibraryRepository.cs` har flyttats till en konfigurationsfil (`web.config` eller `appsettings.json`). Detta gör det möjligt för användare att ändra sökvägen till databasen utan att behöva kompilera om koden.
+2. **Build a web page for book information via ISBN:**
+   - A simple web application has been created to communicate with `BookInfoController` to search for books by ISBN.
+   - The webpage is built using HTML and utilizes JavaScript/jQuery to send and receive data from the API. The information returned by the API is displayed on the webpage.
 
-2. **Bygg en Webbsida för Bokinformation via ISBN:**
-   - En enkel webbapplikation har skapats som kan kommunicera med `BookInfoController` för att söka efter böcker via ISBN. 
-   - Webbplatsen är byggd med HTML och använder JavaScript/jQuery för att skicka och ta emot data från API:t. Informationen som returneras från API:t visas på webbplatsen.
+3. **Error handling and validation of incoming data:**
+   - The API has been enhanced with validation to ensure incoming strings are not null, empty, or only contain whitespace. If invalid data is sent, the API returns an error message instead of crashing.
+   - If a book is not found, this is handled on the webpage to clearly indicate an error has occurred, instead of displaying "Book not found!".
 
-3. **Felhantering och Validering av Inkommande Data:**
-   - API:t har utökats med validering för att säkerställa att inkommande strängar inte är null, tomma eller enbart innehåller blanksteg. Om ogiltig data skickas in returnerar API:t ett felmeddelande istället för att krascha.
-   - Om en bok inte hittas, hanteras detta på webbplatsen så att användaren tydligt ser att ett fel har inträffat, istället för att visa "Book not found!".
+4. **Enhanced search functionality:**
+   - The search functionality has been extended to support searches by title and author, in addition to ISBN. The result is a list of all matches that meet the search criteria.
 
-4. **Utökad Sökfunktionalitet:**
-   - Sökfunktionen har utökats för att stödja sökningar baserade på titel och författare, förutom ISBN. Resultatet är en lista med alla träffar som matchar sökkriterierna.
+5. **Add new books to the library:**
+   - A POST method has been added to the API to enable the creation of new book objects in the XML file.
+   - The method calls an internal SET method in `LibraryRepository` that handles the insertion of new books.
 
-5. **Lägg till Nya Böcker i Biblioteket:**
-   - En POST-metod har lagts till i API:t för att möjliggöra skapandet av nya bokobjekt i XML-filen.
-   - Metoden anropar en intern SET-metod i `LibraryRepository` som hanterar insättningen av nya böcker.
+6. **New view for submitting new book values to the API:**
+   - A new view has been created on the website where users can add new books. This view validates that no fields are empty or contain only whitespace. Error messages are displayed for invalid input.
 
-6. **Ny Vy för Att Skicka Nya Bokvärden till API:t:**
-   - En ny vy på webbplatsen har skapats där användare kan lägga till nya böcker. Denna vy validerar att inga fält är tomma eller innehåller enbart blanksteg. Felmeddelanden visas vid ogiltig inmatning.
+7. **Function to submit book suggestions to the API:**
+   - A function has been implemented that allows users to submit book suggestions to the API, including the name of the person submitting the suggestion, the author's name, and the book title.
+   - The API checks if a folder for the current date exists in the project, creating one if it does not. It then saves a file with the suggestion in the folder. The filename follows a specific format and uses auto-increment for name conflicts.
 
-7. **Funktion för Att Skicka Bokförslag till API:t:**
-   - En funktion har implementerats som tillåter användare att skicka bokförslag till API:t, inklusive namn på personen som skickar förslaget, författarens namn och boktitel.
-   - API:t skapar en mapp med dagens datum om den inte redan finns och sparar en fil med förslaget i mappen. Filnamnet följer en specifik formatstandard och använder auto-increment vid namnkonflikter.
-
-Dessa förbättringar och utökningar har gjorts för att öka flexibiliteten, användarvänligheten och funktionaliteten i bibliotekssystemet. Projektet innehåller nu en mer robust felhantering, en förbättrad sökfunktion och möjligheter för användare att enkelt lägga till nya böcker och föreslå nya titlar.
+### Summary
+These enhancements and extensions have been made to increase the flexibility, usability, and functionality of the library system. The project now includes more robust error handling, improved search functionality, and capabilities for users to easily add new books and suggest new titles.
